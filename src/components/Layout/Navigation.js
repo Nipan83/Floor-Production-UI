@@ -1,15 +1,12 @@
 import React from 'react'
 import {Navbar} from 'react-bootstrap';
+import './Navigation.css'
 //import {Link} from "react-router-dom";
 
 const Navigation = () => {
 
     return (
-        <Navbar className="navigation-bar">
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-        </Navbar.Collapse>
-        </Navbar>
+        <div className="nav">Performance Dashboard</div>
 	)
 }
 

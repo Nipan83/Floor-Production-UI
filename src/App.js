@@ -12,16 +12,16 @@ function App() {
       <React.Fragment>
           <Router>
             <Navigation />
-            <Container fluid>
+            <div>
                   <Row>
-                      <Col xs={10} id="page-content-wrapper">
+                      <Col sm={12} id="page-content-wrapper">
                           <Switch>
                               <Route path='/admin' render={(props) => (<Admin />)}/>
                               <Route path="/" exact={true} component={Dashboard} />
                             </Switch>
                       </Col> 
                   </Row>
-            </Container>
+            </div>
           </Router>
           <div id="overlay"></div>  
       </React.Fragment>
