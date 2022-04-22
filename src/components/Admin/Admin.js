@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react";
 import {Button, Row, Col} from 'react-bootstrap';
+import HourlyDashboard from './HourlyDashboard/HourlyDashboard.js'
 import './Admin.css'
 
 const Admin = () => {
@@ -14,7 +15,9 @@ const Admin = () => {
                     <div>MID</div>
                 </Col> 
                 <Col sm={4} className="panel right-panel">
-                    <div>RIGHT</div>
+                    <div>
+                        <HourlyDashboard></HourlyDashboard>
+                    </div>
                 </Col>  
             </Row>
         </div>
