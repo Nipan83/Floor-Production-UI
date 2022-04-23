@@ -34,8 +34,8 @@ const Station = () => {
     const [edit, setEdit] = useState(false);
     const [loading, setLoading] = useState(true);
 
-    const admin = false;
-
+    const admin = window.location.pathname.includes('admin') === true
+    
     const getStationList = ()=>{
         setLoading(true);
         axios.get(`${serverUrl}/station/`).then((response)=>{

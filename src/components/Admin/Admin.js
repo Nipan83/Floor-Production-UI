@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import {Button, Row, Col} from 'react-bootstrap';
-import HourlyDashboard from './HourlyDashboard/HourlyDashboard.js'
-import Station from './StationList/Station.js'
+import HourlyDashboard from '../HourlyDashboard/HourlyDashboard.js'
+import Station from '../StationList/Station.js'
 import './Admin.css'
 
 const Admin = () => {
