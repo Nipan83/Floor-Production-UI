@@ -1,52 +1,58 @@
 import React, {useState, useEffect} from "react";
 import {Row, Col} from 'react-bootstrap';
-import './Station.css';
 import { TextField, Button, MenuItem } from "@mui/material";
 import AutoGraphIcon from '@mui/icons-material/AutoGraph';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+
+import axios from "axios";
+
+import StationForm from "./StationForm";
+import './Station.css';
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 600,
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  p: 4
+};
+
+const serverUrl = process.env.REACT_APP_API_PATH;
 
 const Station = () => {
-
-    const stationsJson = [
-        {
-            'id':1,
-            'name': 'Station 1',
-            'state': 'In Use',
-            'description': 'Station 1 Description. Located in XYZ'
-        },
-        {
-            'id':2,
-            'name': 'Station 2',
-            'state': 'Idle',
-            'description': 'Station 2 Description. Located in XYZ'
-
-        },
-        {
-            'id':3,
-            'name': 'Station 3',
-            'state': 'In Use',
-            'description': 'Station 3 Description. Located in XYZ'
-        },
-        {
-            'id':4,
-            'name': 'Station 4',
-            'state': 'In Use',
-            'description': 'Station 4 Description. Located in XYZ'
-        }
-    ]
 
     const [stationList, setStationList] = useState([]);
     const [station, setStation] = useState(1);
     const [stationDet, setStationDet] = useState({});
+
+    const [open, setOpen] = useState(false);
+    const [edit, setEdit] = useState(false);
+    const [loading, setLoading] = useState(true);
+
     const admin = true;
 
+    const getStationList = ()=>{
+        setLoading(true);
+        axios.get(`${serverUrl}/station/`).then((response)=>{
+            console.log(response);
+            setLoading(false);
+            let stationsJson = response.data.result;
+            setStationList(stationsJson);
+            if(stationsJson.length>0){      
+                setStation(stationsJson[0].id);
+                setStationDet(stationsJson[0]);
+            }
+        });
+    }
+
     useEffect(()=>{
-        setStationList(stationsJson);
-        if(stationsJson.length>0){      
-            setStation(stationsJson[0].id);
-            setStationDet(stationsJson[0]);
-        }
-        
+        getStationList();
+
     },[])
 
     const handleChange = (event)=>{
@@ -55,6 +61,20 @@ const Station = () => {
         let st = stationList.find((st)=>st.id===id);
         setStation(st.id);
         setStationDet(st);
+    }
+
+    const handleAdd = () => {
+        setOpen(true);
+        setEdit(false);
+    }
+    const handleClose = () => setOpen(false);
+    const handleEdit = () => {
+        setOpen(true);
+        setEdit(true);
+    };
+
+    if(loading){
+        return (<>Loading...</>)
     }
 
     return (
@@ -102,10 +122,25 @@ const Station = () => {
 
             {admin && 
                 <div className="mt-2">
-                    <Button variant="contained">Add</Button> &nbsp;
-                    <Button variant="contained">Edit</Button>
+                    <Button variant="contained" onClick={handleAdd}>Add</Button> &nbsp;
+                    <Button variant="contained" onClick={handleEdit}>Edit</Button>
                 </div>
             }
+
+            <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              { edit && <h4>Edit Station</h4>}
+              { !edit && <h4>Add Station</h4>}
+              <Box sx={{ mt: 1 }}>
+                <StationForm handleClose={handleClose} edit={edit} stationDet={stationDet} getStationList={getStationList} />
+              </Box>
+            </Box>
+          </Modal>
         </div>
     )
 }
