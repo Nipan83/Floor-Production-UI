@@ -17,3 +17,21 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.blue{
+  color: blue;
+}
+
+.red{
+  color: red;
+}
+
+.italic{
+  font-style: italic;
+}
+
+
+.btnt{
+  background-color: blue;
+  color: white;
+}
