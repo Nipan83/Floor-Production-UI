@@ -5,11 +5,13 @@ import AutoGraphIcon from '@mui/icons-material/AutoGraph';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import axios from "axios";
 
 import StationForm from "./StationForm";
 import './Station.css';
+import TableLoader from '../Util/TableLoader';
 
 const style = {
   position: "absolute",
@@ -73,8 +75,12 @@ const Station = () => {
         setEdit(true);
     };
 
+    const handleDelete = () => {
+        alert("WIP")
+    }
+
     if(loading){
-        return (<>Loading...</>)
+        return (<TableLoader/>)
     }
 
     return (
@@ -123,7 +129,8 @@ const Station = () => {
             {admin && 
                 <div className="mt-2">
                     <Button variant="contained" onClick={handleAdd}>Add</Button> &nbsp;
-                    <Button variant="contained" onClick={handleEdit}>Edit</Button>
+                    <Button variant="contained" onClick={handleEdit}>Edit</Button> &nbsp;
+                    <Button variant="contained" style={{color: 'white',backgroundColor:'red'}} onClick={handleDelete}><DeleteIcon/></Button> &nbsp;
                 </div>
             }
 
