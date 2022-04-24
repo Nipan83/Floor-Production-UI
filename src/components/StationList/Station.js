@@ -10,6 +10,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import axios from "axios";
 
 import StationForm from "./StationForm";
+import Alert from "../Util/Alert";
 import './Station.css';
 import TableLoader from '../Util/TableLoader';
 
@@ -33,6 +34,8 @@ const Station = () => {
     const [stationDet, setStationDet] = useState({});
 
     const [open, setOpen] = useState(false);
+    const [alertOpen, setAlertOpen] = useState(false);
+    const [alertMessage, setAlertMessage] = useState("");
     const [edit, setEdit] = useState(false);
     const [loading, setLoading] = useState(true);
 
@@ -75,8 +78,18 @@ const Station = () => {
         setEdit(true);
     };
 
+    const handleAlertSubmit = ()=>{
+        alert("delete WIP");
+        setAlertOpen(false);
+    }
+
+    const handleAlertClose = ()=>{
+        setAlertOpen(false);
+    }
+
     const handleDelete = () => {
-        alert("WIP")
+        setAlertOpen(true);
+        setAlertMessage("Are you sure to delete the selected station?")
     }
 
     if(loading){
@@ -148,6 +161,8 @@ const Station = () => {
               </Box>
             </Box>
           </Modal>
+
+          {alertOpen && <Alert message={alertMessage} handleAlertSubmit={handleAlertSubmit} handleAlertClose={handleAlertClose}/>}
         </div>
     )
 }
