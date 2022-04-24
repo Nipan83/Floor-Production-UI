@@ -6,6 +6,7 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import DeleteIcon from '@mui/icons-material/Delete';
+import { toast } from "react-toastify";
 
 import axios from "axios";
 
@@ -79,8 +80,13 @@ const Station = () => {
     };
 
     const handleAlertSubmit = ()=>{
-        alert("delete WIP");
         setAlertOpen(false);
+        let id = stationDet.id;
+        axios.delete(`${serverUrl}/station/${id}`).then((response)=>{
+            console.log(response);
+            toast.success("Successfully deleted Station");
+            getStationList();
+        });
     }
 
     const handleAlertClose = ()=>{
@@ -89,7 +95,7 @@ const Station = () => {
 
     const handleDelete = () => {
         setAlertOpen(true);
-        setAlertMessage("Are you sure to delete the selected station?")
+        setAlertMessage("Are you sure to delete the selected station?");
     }
 
     if(loading){
@@ -134,6 +140,9 @@ const Station = () => {
 
                     <div className="station-desciption mt-4">
                         {stationDet.description}
+                    </div>
+                    <div className="station-desciption mt-2 italic blue">
+                        Created At: {stationDet.createdAt}
                     </div>
                 </div>
             </>
