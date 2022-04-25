@@ -31,9 +31,9 @@ const HourlyDashboard = () => {
     };
 
     return (<div>
-        <Paper sx={{width: '100%', overflow: 'hidden', paddingTop: '10px'}}>
+        <div sx={{width: '100%', overflow: 'hidden', paddingTop: '10px'}}>
             <h5 className="hourly-scoreboard-header">HOURLY SCORECARD</h5>
-            <TableContainer sx={{maxHeight: 440}}>
+            <TableContainer sx={{maxHeight: 420}}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                         <TableRow>
@@ -63,7 +63,7 @@ const HourlyDashboard = () => {
                 </Table>
             </TableContainer>
             <TablePagination
-                className="hourly-scoreboard-table-pagination"
+                className="hourly-scoreboard-table-pagination small"
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
                 count={rows.length}
@@ -72,7 +72,7 @@ const HourlyDashboard = () => {
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
             />
-        </Paper>
+        </div>
     </div>)
 }
 

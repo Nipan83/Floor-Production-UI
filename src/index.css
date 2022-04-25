@@ -35,3 +35,7 @@ code {
   background-color: blue;
   color: white;
 }
+
+.small{
+  font-size: .6rem;
+}
