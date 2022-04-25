@@ -33,7 +33,7 @@ const HourlyDashboard = () => {
     return (<div>
         <div sx={{width: '100%', overflow: 'hidden', paddingTop: '10px'}}>
             <h5 className="hourly-scoreboard-header">HOURLY SCORECARD</h5>
-            <TableContainer sx={{maxHeight: 420}}>
+            <TableContainer sx={{maxHeight: '68vh'}}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                         <TableRow>
