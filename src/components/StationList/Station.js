@@ -50,8 +50,6 @@ const Station = () => {
             setLoading(false);
             let stationsJson = response.data.result;
             setStationList(stationsJson);
-            console.log('the station list is as follows:');
-            console.log(stationsJson);
             let stationValueSet = false;
             if(isNewStationAdded){
                 setStation(stationsJson[stationsJson.length-1].id);
@@ -62,7 +60,6 @@ const Station = () => {
             if(!stationValueSet && currentlySelectedStation){
                 let currentlySelectedStationFromFreshDataArray = stationsJson.filter((freshStation)=>freshStation.id===currentlySelectedStation);
                 let currentlySelectedStationFromFreshData = currentlySelectedStationFromFreshDataArray.length > 0?currentlySelectedStationFromFreshDataArray[0]:null;
-                console.log(`currentlySelectedStationFromFreshData: ${currentlySelectedStationFromFreshData}`);
                 if(currentlySelectedStationFromFreshData) {
                     setStation(currentlySelectedStationFromFreshData.id);
                     setStationDet(currentlySelectedStationFromFreshData);
