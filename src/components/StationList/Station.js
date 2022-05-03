@@ -53,6 +53,7 @@ const Station = () => {
             let stationValueSet = false;
             if(isNewStationAdded){
                 setStation(stationsJson[stationsJson.length-1].id);
+                localStorage.setItem('selected_station',stationsJson[stationsJson.length-1].id);
                 setStationDet(stationsJson[stationsJson.length-1]);
                 setCurrentlySelectedStation(stationsJson[stationsJson.length-1].id);
                 stationValueSet=true;
@@ -62,12 +63,14 @@ const Station = () => {
                 let currentlySelectedStationFromFreshData = currentlySelectedStationFromFreshDataArray.length > 0?currentlySelectedStationFromFreshDataArray[0]:null;
                 if(currentlySelectedStationFromFreshData) {
                     setStation(currentlySelectedStationFromFreshData.id);
+                    localStorage.setItem('selected_station',currentlySelectedStationFromFreshData.id);
                     setStationDet(currentlySelectedStationFromFreshData);
                     stationValueSet = true;
                 }
             }
             if(!stationValueSet && stationsJson.length > 0){
                 setStation(stationsJson[0].id);
+                localStorage.setItem('selected_station',stationsJson[0].id);
                 setStationDet(stationsJson[0]);
                 setCurrentlySelectedStation(stationsJson[0].id);
             }
@@ -85,6 +88,7 @@ const Station = () => {
         let st = stationList.find((st)=>st.id===id);
         setStation(st.id);
         setStationDet(st);
+        localStorage.setItem('selected_station',id);
         setCurrentlySelectedStation(st.id);
     }
 
