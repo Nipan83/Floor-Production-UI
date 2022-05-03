@@ -33,6 +33,7 @@ const Station = () => {
     const [stationList, setStationList] = useState([]);
     const [station, setStation] = useState(1);
     const [stationDet, setStationDet] = useState({});
+    const [currentlySelectedStation, setCurrentlySelectedStation] = useState(null);
 
     const [open, setOpen] = useState(false);
     const [alertOpen, setAlertOpen] = useState(false);
@@ -42,16 +43,33 @@ const Station = () => {
 
     const admin = window.location.pathname.includes('admin') === true
     
-    const getStationList = ()=>{
+    const getStationList = (isNewStationAdded)=>{
         setLoading(true);
         axios.get(`${serverUrl}/station/`).then((response)=>{
             console.log(response);
             setLoading(false);
             let stationsJson = response.data.result;
             setStationList(stationsJson);
-            if(stationsJson.length>0){      
+            let stationValueSet = false;
+            if(isNewStationAdded){
+                setStation(stationsJson[stationsJson.length-1].id);
+                setStationDet(stationsJson[stationsJson.length-1]);
+                setCurrentlySelectedStation(stationsJson[stationsJson.length-1].id);
+                stationValueSet=true;
+            }
+            if(!stationValueSet && currentlySelectedStation){
+                let currentlySelectedStationFromFreshDataArray = stationsJson.filter((freshStation)=>freshStation.id===currentlySelectedStation);
+                let currentlySelectedStationFromFreshData = currentlySelectedStationFromFreshDataArray.length > 0?currentlySelectedStationFromFreshDataArray[0]:null;
+                if(currentlySelectedStationFromFreshData) {
+                    setStation(currentlySelectedStationFromFreshData.id);
+                    setStationDet(currentlySelectedStationFromFreshData);
+                    stationValueSet = true;
+                }
+            }
+            if(!stationValueSet && stationsJson.length > 0){
                 setStation(stationsJson[0].id);
                 setStationDet(stationsJson[0]);
+                setCurrentlySelectedStation(stationsJson[0].id);
             }
         });
     }
@@ -67,6 +85,7 @@ const Station = () => {
         let st = stationList.find((st)=>st.id===id);
         setStation(st.id);
         setStationDet(st);
+        setCurrentlySelectedStation(st.id);
     }
 
     const handleAdd = () => {
@@ -104,7 +123,7 @@ const Station = () => {
 
     return (
         <div>
-            { stationList.length == 0 && 
+            { stationList.length === 0 &&
                 <div className="blue italic">No Stations Added.</div>
             }
             { stationList.length>0 && 

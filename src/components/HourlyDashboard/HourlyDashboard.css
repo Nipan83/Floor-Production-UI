@@ -3,6 +3,10 @@
     margin-left: 10px
 }
 
+.hourly-scoreboard-table-pagination {
+    margin-top: 20px;
+}
+
 .hourly-scoreboard-table-pagination * {
 
     margin-bottom: 0px;

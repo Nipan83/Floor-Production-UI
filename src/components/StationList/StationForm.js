@@ -31,7 +31,7 @@ export default function StationForm({ handleClose, edit, stationDet, getStationL
         })
         .then(function (response) {
             toast.success("Successfully added Station");
-            getStationList();
+            getStationList(true);
             handleClose();
         })
         .catch(function (error) {
