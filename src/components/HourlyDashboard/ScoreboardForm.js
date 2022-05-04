@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { TextField, Button, MenuItem } from "@mui/material";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import TimePicker from "@mui/lab/TimePicker";
+import AdapterMoment from "@mui/lab/AdapterMoment";
+
 import { toast } from "react-toastify";
 import axios from "axios";
 const serverUrl = process.env.REACT_APP_API_PATH;
@@ -7,7 +11,7 @@ const serverUrl = process.env.REACT_APP_API_PATH;
 const station_id = localStorage.getItem('selected_station');
 
 export default function ScoreboardForm({ handleClose, edit, scoreboardDet, getHourlyScoreboard, date }) {
-  const [time, setTime] = useState("");
+  const [time, setTime] = useState('10:00');
   const [actual, setActual] = useState(0);
   const [target, setTarget] = useState(0);
 
@@ -21,9 +25,11 @@ export default function ScoreboardForm({ handleClose, edit, scoreboardDet, getHo
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(time);
+    console.log(time._d);
     console.log(actual);
     console.log(target);
+    //TODO
+    return;
     if(!edit){
         axios.post(`${serverUrl}/scoreboard/`, {
             time,actual,target,business_date:date,station_id
@@ -61,18 +67,19 @@ export default function ScoreboardForm({ handleClose, edit, scoreboardDet, getHo
   };
   return (
     <form onSubmit={handleSubmit}>
-
-      <TextField
-        margin="normal"
-        required
-        fullWidth
-        id="time"
-        label="Time"
-        name="time"
-        value={time}
-        onChange={(event) => setTime(event.target.value)}
-        autoFocus
-      />
+      <br/>
+      <LocalizationProvider dateAdapter={AdapterMoment}>
+        <TimePicker
+          label="Entry Time"
+          value={time}
+          fullWidth
+          margin="normal"
+          onChange={(newValue) => {
+            setTime(newValue);
+          }}
+          renderInput={(params) => <TextField {...params} />}
+        />
+      </LocalizationProvider>
 
       <TextField
         margin="normal"
