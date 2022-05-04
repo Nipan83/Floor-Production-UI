@@ -39,3 +39,7 @@ code {
 .small{
   font-size: .6rem;
 }
+
+.pointer{
+  cursor: pointer;
+}

@@ -3,6 +3,7 @@ import { TextField, Button, MenuItem } from "@mui/material";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import TimePicker from "@mui/lab/TimePicker";
 import AdapterMoment from "@mui/lab/AdapterMoment";
+import EditIcon from '@mui/icons-material/Edit';
 
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -12,30 +13,31 @@ const station_id = localStorage.getItem('selected_station');
 
 export default function ScoreboardForm({ handleClose, edit, scoreboardDet, getHourlyScoreboard, date }) {
   const [time, setTime] = useState('10:00');
+  const [timeEdit, setTimeEdit] = useState(false);
   const [actual, setActual] = useState(0);
   const [target, setTarget] = useState(0);
+
+  const handleEditIcon = ()=>{
+    setTimeEdit(true);
+  }
 
   useEffect(()=>{
     if(edit){
       setTime(scoreboardDet.time);
       setActual(scoreboardDet.actual);
-      setActual(scoreboardDet.target);
+      setTarget(scoreboardDet.target);
     }
   },[])
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(time._d);
-    console.log(actual);
-    console.log(target);
-    //TODO
-    return;
+    let updated_time = new Date(time._d).toLocaleTimeString();
     if(!edit){
         axios.post(`${serverUrl}/scoreboard/`, {
-            time,actual,target,business_date:date,station_id
+            time:updated_time,actual,target,business_date:date,station_id
         })
         .then(function (response) {
-            toast.success("Successfully added Station");
+            toast.success("Successfully Added Scoreboard Entry!");
             getHourlyScoreboard();
             handleClose();
         })
@@ -47,7 +49,7 @@ export default function ScoreboardForm({ handleClose, edit, scoreboardDet, getHo
     }
 
     else{
-        axios.put(`${serverUrl}/scoreboard/${scoreboardDet.station_id}`, {
+        axios.put(`${serverUrl}/scoreboard/${scoreboardDet.id}`, {
             actual: actual,
             target: target,
             time: time
@@ -68,6 +70,10 @@ export default function ScoreboardForm({ handleClose, edit, scoreboardDet, getHo
   return (
     <form onSubmit={handleSubmit}>
       <br/>
+      <h6>Business Date: &nbsp; {date}</h6>
+      {edit && <h6>Time: &nbsp; {time} &nbsp; <span className="pointer" onClick={handleEditIcon}><EditIcon/></span></h6>}
+      <br/>
+      {(timeEdit || !edit) &&
       <LocalizationProvider dateAdapter={AdapterMoment}>
         <TimePicker
           label="Entry Time"
@@ -80,7 +86,7 @@ export default function ScoreboardForm({ handleClose, edit, scoreboardDet, getHo
           renderInput={(params) => <TextField {...params} />}
         />
       </LocalizationProvider>
-
+      }
       <TextField
         margin="normal"
         required

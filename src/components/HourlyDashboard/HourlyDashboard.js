@@ -13,9 +13,13 @@ import axios from "axios";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import { toast } from "react-toastify";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DatePicker from "@mui/lab/DatePicker";
+import AdapterMoment from "@mui/lab/AdapterMoment";
 
-import { Button } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import TableLoader from '../Util/TableLoader';
 import Alert from "../Util/Alert";
 import ScoreboardForm from "./ScoreboardForm";
@@ -47,18 +51,34 @@ const HourlyDashboard = () => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [rows, setRows] = useState([]);
+    const [frows, setFrows] = useState([]);
     const [columns, setColumns] = useState([]);
+    const [fcolumns, setFcolumns] = useState([]);
 
     const [open, setOpen] = useState(false);
     const [alertOpen, setAlertOpen] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
     const [edit, setEdit] = useState(false);
-    const [date, setDate] = useState("");
     const [scoreboardDet, setScoreboardDet] = useState({});
+    const [date, setDate] = useState("");
+    const [disabledColumns,setDisabledColumns] = useState(['id','station_id','createdAt','updatedAt','business_date'])
+
+    const formatBusinessDate = ()=>{
+        let bd = new Date();
+        let y = `${bd.getFullYear()}`;
+        let m = `${bd.getMonth()+1}`;
+        m = m<10?`0${m}`:m;
+        let d = `${bd.getDate()}`;
+        d = d<10?`0${d}`:d;
+        setDate(`${y}-${m}-${d}`)
+    }
 
     const getHourlyScoreboard = ()=>{
         setLoading(true);
-        axios.get(`${serverUrl}/scoreboard/${selected_station_id}`).then((response)=>{
+        setRows([]);
+        setColumns([]);
+        setFcolumns([]);
+        axios.get(`${serverUrl}/scoreboard/${selected_station_id}/${date}`).then((response)=>{
             console.log(response);
             setLoading(false);
 
@@ -68,11 +88,19 @@ const HourlyDashboard = () => {
             setColumns(Object.keys(response[0]))
             setRows(response);
 
+            let fc = Object.keys(response[0]).filter((x)=>disabledColumns.indexOf(x)<0);
+            console.log(fc)
+            setFcolumns(fc);
+
         })
     }
 
     useEffect(()=>{
         getHourlyScoreboard();
+    },[date])
+
+    useEffect(()=>{
+        formatBusinessDate();
     },[])
     
 
@@ -104,6 +132,19 @@ const HourlyDashboard = () => {
         setAlertOpen(false);
     }
 
+    const setBusinessDate = (val) => {
+        console.log(val);
+        setDate(val);
+    }
+
+    const prepareRowId = (id)=>`sc-tr-${id}`
+
+    const clickRow = (e,row)=>{
+        console.log(row);
+        setScoreboardDet(row);
+        handleEdit();
+    }
+
     const handleAlertSubmit = ()=>{
     setAlertOpen(false);
     let id = scoreboardDet.id;
@@ -123,7 +164,12 @@ const HourlyDashboard = () => {
     if(rows.length === 0){
         return (
             <>
-                <div className="blue italic">No Hourly Scoreboard Data Found.</div>
+                
+                <div>
+                    <span className="hourly-scoreboard-header mt-2">HOURLY SCORECARD:&nbsp;</span> <input className="bd" type="date" name="date" value={date} onChange={e=>setBusinessDate(e.target.value)} placeholder="Business Date" />
+                </div>
+
+                <div className="blue italic mt-4">No Hourly Scoreboard Data Found.</div>
                 {admin && 
                 <div className="mt-4">
                     <Button variant="contained" onClick={handleAdd}>Add</Button> &nbsp;
@@ -154,12 +200,15 @@ const HourlyDashboard = () => {
     return (
     <div>
         <div sx={{width: '100%', overflow: 'hidden', paddingTop: '10px'}}>
-            <h5 className="hourly-scoreboard-header">HOURLY SCORECARD</h5>
-            <TableContainer sx={{maxHeight: '58vh'}}>
+            <div>
+                <span className="hourly-scoreboard-header mt-2">HOURLY SCORECARD:&nbsp;</span> <input className="bd" type="date" name="date" value={date} onChange={e=>setBusinessDate(e.target.value)} placeholder="Business Date" />
+            </div>
+
+            <TableContainer sx={{maxHeight: '55vh'}}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                         <TableRow>
-                            {columns.map((column) => (<TableCell
+                            {fcolumns.map((column) => (<TableCell
                                 key={column}
                             >
                                 {column}
@@ -170,13 +219,20 @@ const HourlyDashboard = () => {
                         {rows
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((row) => {
-                                return (<TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                                    {columns.map((column) => {
+                                return (<TableRow className="sc-tr"
+                                hover role="checkbox" tabIndex={-1} id={prepareRowId(row.id)} key={row.id}>
+                                    {fcolumns.map((column) => {
                                         const value = row[column];
                                         return (<TableCell key={column}>
                                             {value}
                                         </TableCell>);
                                     })}
+                                    {admin && 
+                                    <>
+                                        <td className="blue" onClick={e=>clickRow(e,row)}><EditIcon/></td>
+                                        <td onClick={handleDelete} className="red"><DeleteIcon/></td>
+                                    </>
+                                    }
                                 </TableRow>);
                             })}
                     </TableBody>
@@ -197,8 +253,6 @@ const HourlyDashboard = () => {
         {admin && 
             <div className="mt-2">
                 <Button variant="contained" onClick={handleAdd}>Add</Button> &nbsp;
-                <Button variant="contained" onClick={handleEdit}>Edit</Button> &nbsp;
-                <Button variant="contained" style={{color: 'white',backgroundColor:'red'}} onClick={handleDelete}><DeleteIcon/></Button> &nbsp;
             </div>
         }
 

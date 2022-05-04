@@ -1,6 +1,7 @@
 .hourly-scoreboard-header {
     margin-top: 10px;
-    margin-left: 10px
+    margin-left: 10px;
+    font-weight: bold;
 }
 
 .hourly-scoreboard-table-pagination {
@@ -22,4 +23,13 @@
     border-radius: 5px;
     padding: 5px;
     width: 30vh;
+}
+
+.bd{
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.sc-tr{
+    cursor: pointer;
 }
