@@ -8,12 +8,14 @@ import './Admin.css'
 
 const Admin = () => {
 
+    const [selectedStationId, setSelectedStationId] = useState(1);
+
     return (
         <div>
             <Row className="justify-content-around">
                 <Col sm={4} className="panel left-panel">
                     <Paper sx={{height: '100%', padding: '20px'}}>
-                        <Station></Station>
+                        <Station station={selectedStationId} setStation={setSelectedStationId}></Station>
                     </Paper>
                 </Col>
                 <Col sm={4} className="panel mid-panel">
@@ -21,7 +23,7 @@ const Admin = () => {
                 </Col> 
                 <Col sm={4} className="panel right-panel">
                     <Paper sx={{height: '100%', padding: '20px'}}>
-                        <HourlyDashboard></HourlyDashboard>
+                        <HourlyDashboard selectedStationId={selectedStationId} setSelectedStationId={setSelectedStationId}></HourlyDashboard>
                     </Paper>
                 </Col>  
             </Row>
