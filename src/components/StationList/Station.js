@@ -84,6 +84,16 @@ const Station = ({station, setStation}) => {
 
     },[])
 
+    const formatDateTime = (dt)=>{
+        if(!dt) return dt;
+
+        let date = dt.split('T')[0];
+        let time = dt.split('T')[1];
+
+        return `${date} - ${time.split('.')[0]}`
+
+    }
+
     const handleChange = (event)=>{
         let id = event.target.value;
         // console.log(id);
@@ -167,7 +177,7 @@ const Station = ({station, setStation}) => {
                         {stationDet.description}
                     </div>
                     <div className="station-desciption mt-2 italic blue">
-                        Created At: {stationDet.createdAt}
+                        Created At: {formatDateTime(stationDet.createdAt)}
                     </div>
                 </div>
             </>
