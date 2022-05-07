@@ -9,9 +9,9 @@ import { toast } from "react-toastify";
 import axios from "axios";
 const serverUrl = process.env.REACT_APP_API_PATH;
 
-const station_id = localStorage.getItem('selected_station');
+// const station_id = localStorage.getItem('selected_station');
 
-export default function ScoreboardForm({ handleClose, edit, scoreboardDet, getHourlyScoreboard, date }) {
+export default function ScoreboardForm({ handleClose, edit, scoreboardDet, getHourlyScoreboard, date , selectedStationId}) {
   const [time, setTime] = useState('10:00');
   const [timeEdit, setTimeEdit] = useState(false);
   const [actual, setActual] = useState(0);
@@ -32,9 +32,10 @@ export default function ScoreboardForm({ handleClose, edit, scoreboardDet, getHo
   const handleSubmit = (event) => {
     event.preventDefault();
     let updated_time = new Date(time._d).toLocaleTimeString();
+    handleClose();
     if(!edit){
         axios.post(`${serverUrl}/scoreboard/`, {
-            time:updated_time,actual,target,business_date:date,station_id
+            time:updated_time,actual,target,business_date:date,station_id:selectedStationId
         })
         .then(function (response) {
             toast.success("Successfully Added Scoreboard Entry!");
@@ -55,7 +56,7 @@ export default function ScoreboardForm({ handleClose, edit, scoreboardDet, getHo
             time: time
         })
         .then(function (response) {
-            toast.success("Successfully Updated Station");
+            toast.success("Successfully Updated Scoreboard");
             getHourlyScoreboard();
             handleClose();
         })

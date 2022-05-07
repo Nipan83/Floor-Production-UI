@@ -28,7 +28,7 @@ import './HourlyDashboard.css';
 
 const serverUrl = process.env.REACT_APP_API_PATH;
 
-const selected_station_id = localStorage.getItem('selected_station');
+// const selected_station_id = localStorage.getItem('selected_station'); // now selectedStationId is being sent as a prop
 
 const admin = window.location.pathname.includes('admin') === true;
 
@@ -45,7 +45,9 @@ const style = {
 
 
 
-const HourlyDashboard = () => {
+const HourlyDashboard = ({selectedStationId}) => {
+
+    console.log(`Hourly dashboard rendered: stationId ${selectedStationId}`)
 
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(0);
@@ -78,7 +80,7 @@ const HourlyDashboard = () => {
         setRows([]);
         setColumns([]);
         setFcolumns([]);
-        axios.get(`${serverUrl}/scoreboard/${selected_station_id}/${date}`).then((response)=>{
+        axios.get(`${serverUrl}/scoreboard/${selectedStationId}/${date}`).then((response)=>{
             console.log(response);
             setLoading(false);
 
@@ -97,7 +99,7 @@ const HourlyDashboard = () => {
 
     useEffect(()=>{
         getHourlyScoreboard();
-    },[date])
+    },[date,selectedStationId])
 
     useEffect(()=>{
         formatBusinessDate();
@@ -123,8 +125,9 @@ const HourlyDashboard = () => {
         setEdit(true);
     };
 
-    const handleDelete = () => {
+    const handleDelete = (e,row) => {
         setAlertOpen(true);
+        setScoreboardDet(row);
         setAlertMessage("Are you sure to delete the selected record?");
     }
 
@@ -139,7 +142,7 @@ const HourlyDashboard = () => {
 
     const prepareRowId = (id)=>`sc-tr-${id}`
 
-    const clickRow = (e,row)=>{
+    const editRow = (e,row)=>{
         console.log(row);
         setScoreboardDet(row);
         handleEdit();
@@ -186,7 +189,8 @@ const HourlyDashboard = () => {
                   { edit && <h4>Edit Scoreboard Data</h4>}
                   { !edit && <h4>Add Scoreboard Data</h4>}
                   <Box sx={{ mt: 1 }}>
-                    <ScoreboardForm handleClose={handleClose} date={date} edit={edit} scoreboardDet={scoreboardDet} getHourlyScoreboard={getHourlyScoreboard} />
+                    <ScoreboardForm handleClose={handleClose} date={date} edit={edit} scoreboardDet={scoreboardDet} 
+                        getHourlyScoreboard={getHourlyScoreboard} selectedStationId={selectedStationId}/>
                   </Box>
                 </Box>
               </Modal>
@@ -229,8 +233,8 @@ const HourlyDashboard = () => {
                                     })}
                                     {admin && 
                                     <>
-                                        <td className="blue" onClick={e=>clickRow(e,row)}><EditIcon/></td>
-                                        <td onClick={handleDelete} className="red"><DeleteIcon/></td>
+                                        <td className="blue" onClick={e=>editRow(e,row)}><EditIcon/></td>
+                                        <td onClick={e=>handleDelete(e,row)} className="red"><DeleteIcon/></td>
                                     </>
                                     }
                                 </TableRow>);
@@ -266,7 +270,8 @@ const HourlyDashboard = () => {
               { edit && <h4>Edit Scoreboard Data</h4>}
               { !edit && <h4>Add Scoreboard Data</h4>}
               <Box sx={{ mt: 1 }}>
-                <ScoreboardForm handleClose={handleClose} date={date} edit={edit} scoreboardDet={scoreboardDet} getHourlyScoreboard={getHourlyScoreboard} />
+                <ScoreboardForm handleClose={handleClose} date={date} edit={edit} scoreboardDet={scoreboardDet} 
+                    getHourlyScoreboard={getHourlyScoreboard} selectedStationId={selectedStationId} />
               </Box>
             </Box>
           </Modal>
