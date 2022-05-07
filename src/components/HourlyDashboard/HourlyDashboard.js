@@ -99,7 +99,7 @@ const HourlyDashboard = ({selectedStationId}) => {
 
     useEffect(()=>{
         getHourlyScoreboard();
-    },[date])
+    },[date,selectedStationId])
 
     useEffect(()=>{
         formatBusinessDate();
@@ -125,8 +125,9 @@ const HourlyDashboard = ({selectedStationId}) => {
         setEdit(true);
     };
 
-    const handleDelete = () => {
+    const handleDelete = (e,row) => {
         setAlertOpen(true);
+        setScoreboardDet(row);
         setAlertMessage("Are you sure to delete the selected record?");
     }
 
@@ -141,7 +142,7 @@ const HourlyDashboard = ({selectedStationId}) => {
 
     const prepareRowId = (id)=>`sc-tr-${id}`
 
-    const clickRow = (e,row)=>{
+    const editRow = (e,row)=>{
         console.log(row);
         setScoreboardDet(row);
         handleEdit();
@@ -232,8 +233,8 @@ const HourlyDashboard = ({selectedStationId}) => {
                                     })}
                                     {admin && 
                                     <>
-                                        <td className="blue" onClick={e=>clickRow(e,row)}><EditIcon/></td>
-                                        <td onClick={handleDelete} className="red"><DeleteIcon/></td>
+                                        <td className="blue" onClick={e=>editRow(e,row)}><EditIcon/></td>
+                                        <td onClick={e=>handleDelete(e,row)} className="red"><DeleteIcon/></td>
                                     </>
                                     }
                                 </TableRow>);

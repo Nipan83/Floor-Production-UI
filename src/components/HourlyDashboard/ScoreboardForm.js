@@ -32,6 +32,7 @@ export default function ScoreboardForm({ handleClose, edit, scoreboardDet, getHo
   const handleSubmit = (event) => {
     event.preventDefault();
     let updated_time = new Date(time._d).toLocaleTimeString();
+    handleClose();
     if(!edit){
         axios.post(`${serverUrl}/scoreboard/`, {
             time:updated_time,actual,target,business_date:date,station_id:selectedStationId
@@ -55,7 +56,7 @@ export default function ScoreboardForm({ handleClose, edit, scoreboardDet, getHo
             time: time
         })
         .then(function (response) {
-            toast.success("Successfully Updated Station");
+            toast.success("Successfully Updated Scoreboard");
             getHourlyScoreboard();
             handleClose();
         })
