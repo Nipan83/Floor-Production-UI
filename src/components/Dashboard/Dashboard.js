@@ -3,6 +3,7 @@ import {Button, Row, Col} from 'react-bootstrap';
 import Paper from '@mui/material/Paper';
 
 import HourlyDashboard from '../HourlyDashboard/HourlyDashboard.js'
+import MidDashboard from '../MidDashboard/MidDashboard.js'
 import Station from '../StationList/Station.js'
 import './Dashboard.css'
 
@@ -17,7 +18,9 @@ const Dashboard = () => {
                     </Paper>
                 </Col>
                 <Col sm={4} className="panel mid-panel">
-                    <Paper sx={{height: '100%', padding: '20px'}}>MID</Paper>
+                    <Paper sx={{height: '100%', padding: '20px'}}>
+                        <MidDashboard></MidDashboard>
+                    </Paper>
                 </Col> 
                 <Col sm={4} className="panel right-panel">
                     <Paper sx={{height: '100%', padding: '20px'}}>
