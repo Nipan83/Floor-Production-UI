@@ -34,7 +34,7 @@ const MidDashboard = ({rows}) => {
             
             let obj = {
                 labels:time, 
-                datasets: [{label: 'Actual', data: actual_dt, backgroundColor: 'blue'},{label:'Target', data: target_dt, backgroundColor: 'green'}]
+                datasets: [{label: 'Actual', data: actual_dt, backgroundColor: '#b0db43'},{label:'Target', data: target_dt, backgroundColor: '#246EB9'}]
             };
 
             setActual(ac);
