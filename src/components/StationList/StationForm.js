@@ -23,6 +23,7 @@ export default function StationForm({ handleClose, edit, stationDet, getStationL
     console.log(name);
     console.log(description);
     console.log(state);
+    handleClose();
     if(!edit){
         axios.post(`${serverUrl}/station/`, {
             name: name,
