@@ -53,12 +53,14 @@ const MidDashboard = ({rows}) => {
     if(rows.length === 0){
         return (<div className="blue italic">Dashboard Details Can't be generated.</div>)
     }
+
+    let difference = target-actual;
     return (
         <div>
             <div className="flex mb-4">
                 <div className="block target-count blue">ACTUAL: &nbsp;{actual}</div>
                 <div className="block target-count blue">TARGET: &nbsp;{target}</div>
-                <div className="block-red target-count red">PENDING: &nbsp;{target-actual}</div>
+                <div className={difference>0?"block-red target-count red":"block-green target-count green"}>PENDING: &nbsp;{difference>0? difference: 0}</div>
             </div>
 
             <div className="chart">

@@ -1,5 +1,5 @@
 
-.block, .block-red{
+.block, .block-red, .block-green{
 	border:  2px solid blue;
 	font-weight: bold;
 	padding: 10px 20px;
@@ -10,6 +10,10 @@
 
 .block-red{
 	border:  2px solid red;
+}
+
+.block-green{
+	border:  2px solid green;
 }
 
 .chart{
