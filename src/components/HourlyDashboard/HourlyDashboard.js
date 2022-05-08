@@ -45,7 +45,7 @@ const style = {
 
 
 
-const HourlyDashboard = ({selectedStationId}) => {
+const HourlyDashboard = ({selectedStationId, setScoreboard}) => {
 
     console.log(`Hourly dashboard rendered: stationId ${selectedStationId}`)
 
@@ -85,6 +85,17 @@ const HourlyDashboard = ({selectedStationId}) => {
             setLoading(false);
 
             response = response.data.result;
+
+            //sort  the response based on the time before setting rows state
+            response.sort((a, b)=>{
+                let dateObjA = new Date(`${a.business_date} ${a.time}`);
+                let dateObjB = new Date(`${b.business_date} ${b.time}`);
+                let unixTimeA = dateObjA.getTime();
+                let unixTimeB = dateObjB.getTime();
+                return unixTimeA-unixTimeB;
+            });
+
+            setScoreboard(response);
 
             if(response.length === 0) return;
             setColumns(Object.keys(response[0]))
