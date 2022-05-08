@@ -45,7 +45,7 @@ const style = {
 
 
 
-const HourlyDashboard = ({selectedStationId}) => {
+const HourlyDashboard = ({selectedStationId, setScoreboard}) => {
 
     console.log(`Hourly dashboard rendered: stationId ${selectedStationId}`)
 
@@ -85,6 +85,8 @@ const HourlyDashboard = ({selectedStationId}) => {
             setLoading(false);
 
             response = response.data.result;
+
+            setScoreboard(response);
 
             if(response.length === 0) return;
             setColumns(Object.keys(response[0]))

@@ -1,0 +1,17 @@
+
+.block, .block-red{
+	border:  2px solid blue;
+	font-weight: bold;
+	padding: 10px 20px;
+	border-radius: 5px;
+	text-align: center;
+	margin-right: 10px;
+}
+
+.block-red{
+	border:  2px solid red;
+}
+
+.chart{
+	margin-top: 5rem;
+}
